@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Advisor AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+  <header class="header container">
+        <img src="{{ url_for('static', filename='img/logo-chatbot.svg') }}" alt="Financial Advisor Logo">
+        <div class="header__actions">
+
+        </div>
+  </header>
+  <main class="main">
+        <section class="chat container" id="chat">
+            <p class="chat__bubble chat__bubble--bot">
+                Hello! I am your personal Financial Advisor AI.<br/><br/>
+                I can help you with budgeting, investment insights, or market trends. How can I assist you today?
+            </p>
+        </section>
+        <section class="input-area container">
+            <div class="input-area__container">
+                <button id="more-options-btn" aria-label="More options button">
+                    <i class="icon icon--more-options"></i>
+                </button>
+                <input type="text" class="input-area__field" placeholder="Type your message..." id="input-field">
+                <button aria-label="Send button" id="send-btn">
+                    <i class="icon icon--send"></i>
+                </button>
+            </div>
+        </section>
+  </main>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</html>
