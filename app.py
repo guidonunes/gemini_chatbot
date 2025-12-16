@@ -15,6 +15,11 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 
+@app.route("/chat", methods=["POST"])
+def chat():
+    prompt = request.json["msg"]
+    response = bot(prompt)
+
 @app.route("/")
 def home():
     return render_template("index.html")
