@@ -18,7 +18,8 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 context = load_knowledge_base("data/satoshi_ai.txt")
-personality = personas['negative']
+personality = personas['positive']
+
 
 def generate_response(prompt):
     max_retries = 1
@@ -30,6 +31,9 @@ def generate_response(prompt):
 
             # I updated this prompt to match your Financial Advisor context
             system_instruction = """
+            #PERSONALITY
+            {personality}
+
             ##PERSONA
             You are a Financial Advisor chatbot.
             You should only answer questions related to finance, budgeting, and investment markets.
@@ -39,8 +43,7 @@ def generate_response(prompt):
             Use the following context to answer the user's questions:
             {context}
 
-            #PERSONALITY
-            {personality}
+
 
             """
 
