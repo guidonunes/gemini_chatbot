@@ -3,6 +3,7 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 from time import sleep
+from helper import load_knowledge_base, save
 
 load_dotenv()
 
@@ -15,6 +16,8 @@ genai.configure(api_key=GEMINI_API)
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
+context = load_knowledge_base("data/satoshi_ai.txt")
+
 def generate_response(prompt):
     max_retries = 1
     attempt_count = 0
@@ -23,9 +26,15 @@ def generate_response(prompt):
         try:
             # I updated this prompt to match your Financial Advisor context
             system_instruction = """
+            ##PERSONA
             You are a Financial Advisor chatbot.
             You should only answer questions related to finance, budgeting, and investment markets.
             If the user asks about unrelated topics, politely decline to answer.
+
+            ##CONTEXT
+            Use the following context to answer the user's questions:
+            {context}
+
             """
 
             model_config = {
