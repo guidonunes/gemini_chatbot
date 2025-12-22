@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from time import sleep
 from helper import load_knowledge_base, save
+from bot_persona import personas
 
 load_dotenv()
 
@@ -17,14 +18,16 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 context = load_knowledge_base("data/satoshi_ai.txt")
+personality = personas['negative']
 
 def generate_response(prompt):
     max_retries = 1
     attempt_count = 0
 
     while True:
+
         try:
-            print(f"Context: \n{context}")
+
             # I updated this prompt to match your Financial Advisor context
             system_instruction = """
             ##PERSONA
@@ -35,6 +38,9 @@ def generate_response(prompt):
             ##CONTEXT
             Use the following context to answer the user's questions:
             {context}
+
+            #PERSONALITY
+            {personality}
 
             """
 
