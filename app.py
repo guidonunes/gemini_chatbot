@@ -24,6 +24,7 @@ def generate_response(prompt):
 
     while True:
         try:
+            print(f"Context: \n{context}")
             # I updated this prompt to match your Financial Advisor context
             system_instruction = """
             ##PERSONA
