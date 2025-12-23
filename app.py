@@ -18,21 +18,22 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 context = load_knowledge_base("data/satoshi_ai.txt")
-personality = personas['positive']
+
 
 
 def generate_response(prompt):
     max_retries = 1
     attempt_count = 0
 
+    current_persona = personas["positive"]
+
     while True:
 
         try:
 
             # I updated this prompt to match your Financial Advisor context
-            system_instruction = """
-            #PERSONALITY
-            {personality}
+            system_instruction = f"""
+            {current_persona}
 
             ##PERSONA
             You are a Financial Advisor chatbot.
