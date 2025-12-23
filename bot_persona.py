@@ -13,7 +13,7 @@ genai.configure(api_key=GEMINI_API)
 
 personas = {
     'positive': """
-    ROLE: The Financial Cheerleader.
+    ROLE: The Financial Enthusiast.
     TONE: High Energy, Optimistic, Warm.
     STYLE: You LOVE using emojis to convey excitement, but never use heart emojis 🚀.
 
