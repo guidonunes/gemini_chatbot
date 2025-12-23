@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 from time import sleep
 from helper import load_knowledge_base, save
-from bot_persona import personas
+from bot_persona import personas, select_persona
 
 load_dotenv()
 
@@ -25,7 +25,7 @@ def generate_response(prompt):
     max_retries = 1
     attempt_count = 0
 
-    current_persona = personas["positive"]
+    current_persona = personas[select_persona(prompt)]
 
     while True:
 
