@@ -30,6 +30,9 @@ def save_conversation():
         You should only answer questions related to finance, budgeting, and investment markets.
         If the user asks about unrelated topics, politely decline to answer.
 
+        ##HISTORY
+        You are to remember all previous interactions in this conversation to provide better answers.
+
         ### FORMATTING RULES (STRICT):
         1. **Be Concise:** Keep your answer short and direct (maximum 3-4 sentences, short bullet points or a short paragraph). Avoid long essays.
         2. **No Fluff:** Get straight to the point.
@@ -38,6 +41,8 @@ def save_conversation():
         ##CONTEXT
         Use the following context to answer the user's questions:
         {context}
+
+
         """
 
     model_config = {
@@ -62,18 +67,21 @@ def generate_response(prompt):
     attempt_count = 0
 
     current_persona = personas[select_persona(prompt)]
+    user_message = f"""
+    considering the following persona guidelines, respond to the user's message.
+    {current_persona}
+
+    answer the folowing message from the user, always remembering the previous questions and answers in this conversation history.
+    {prompt}
+    """
 
     while True:
 
         try:
 
-            # I updated this prompt to match your Financial Advisor context
+            response = chatbot.send_message(user_message)
 
-
-
-
-
-            return
+            return response.text.strip()
 
         except Exception as error:
             attempt_count += 1
