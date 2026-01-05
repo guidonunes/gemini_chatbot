@@ -19,7 +19,43 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 context = load_knowledge_base("data/satoshi_ai.txt")
 
+def save_conversation():
+    current_persona = "neutral"
 
+    system_instruction = f"""
+        {current_persona}
+
+        ##PERSONA
+        You are a Financial Advisor chatbot.
+        You should only answer questions related to finance, budgeting, and investment markets.
+        If the user asks about unrelated topics, politely decline to answer.
+
+        ### FORMATTING RULES (STRICT):
+        1. **Be Concise:** Keep your answer short and direct (maximum 3-4 sentences, short bullet points or a short paragraph). Avoid long essays.
+        2. **No Fluff:** Get straight to the point.
+        3. **Follow-up Question:** You MUST end every single response with a short, relevant question to keep the conversation going.
+
+        ##CONTEXT
+        Use the following context to answer the user's questions:
+        {context}
+        """
+
+    model_config = {
+        "temperature" : 0.1,
+        "max_output_tokens" : 8192
+    }
+
+    llm = genai.GenerativeModel(
+        model_name= MODEL,
+        system_instruction=system_instruction,
+        generation_config=model_config
+    )
+
+    chatbot = llm.start_chat(history=[])
+
+    return chatbot
+
+chatbot = save_conversation()
 
 def generate_response(prompt):
     max_retries = 1
@@ -32,40 +68,12 @@ def generate_response(prompt):
         try:
 
             # I updated this prompt to match your Financial Advisor context
-            system_instruction = f"""
-            {current_persona}
-
-            ##PERSONA
-            You are a Financial Advisor chatbot.
-            You should only answer questions related to finance, budgeting, and investment markets.
-            If the user asks about unrelated topics, politely decline to answer.
-
-            ### FORMATTING RULES (STRICT):
-            1. **Be Concise:** Keep your answer short and direct (maximum 3-4 sentences, short bullet points or a short paragraph). Avoid long essays.
-            2. **No Fluff:** Get straight to the point.
-            3. **Follow-up Question:** You MUST end every single response with a short, relevant question to keep the conversation going.
-
-            ##CONTEXT
-            Use the following context to answer the user's questions:
-            {context}
 
 
 
-            """
 
-            model_config = {
-                "temperature" : 0.1,
-                "max_output_tokens" : 8192
-            }
 
-            llm = genai.GenerativeModel(
-                model_name= MODEL,
-                system_instruction=system_instruction,
-                generation_config=model_config
-            )
-
-            response = llm.generate_content(prompt)
-            return response.text
+            return
 
         except Exception as error:
             attempt_count += 1
