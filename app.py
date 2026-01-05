@@ -5,6 +5,7 @@ import os
 from time import sleep
 from helper import load_knowledge_base, save
 from bot_persona import personas, select_persona
+from history_manager import delete_old_messages
 
 load_dotenv()
 
@@ -80,6 +81,9 @@ def generate_response(prompt):
         try:
 
             response = chatbot.send_message(user_message)
+
+            if len(chatbot.history) > 6:
+                chatbot.history = delete_old_messages(chatbot.history)
 
             print(f"Queries: {len(chatbot.history)}\n {chatbot.history}")
 
