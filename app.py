@@ -81,6 +81,8 @@ def generate_response(prompt):
 
             response = chatbot.send_message(user_message)
 
+            print(f"Queries: {len(chatbot.history)}\n {chatbot.history}")
+
             return response.text.strip()
 
         except Exception as error:
