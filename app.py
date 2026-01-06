@@ -6,6 +6,7 @@ from time import sleep
 from helper import load_knowledge_base, save
 from bot_persona import personas, select_persona
 from history_manager import delete_old_messages, summarize_history
+import uuid
 
 load_dotenv()
 
@@ -19,6 +20,9 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 context = load_knowledge_base("data/satoshi_ai.txt")
+
+image_save_path = None
+UPLOAD_FOLDER = "temp_imgs"
 
 def save_conversation():
     current_persona = "neutral"
@@ -96,6 +100,17 @@ def generate_response(prompt):
                 return "Gemini Error: %s" % error
 
             sleep(50)
+
+@app.route("/upload_image", methods=["POST"])
+def upload_image():
+    global image_save_path
+    if 'image' in request.files:
+        image = request.files['image']
+        file_name = str(uuid.uuid4()) + os.path.splitext(image.filename)[1]
+        image_save_path = os.path.join(UPLOAD_FOLDER, file_name)
+        image.save(image_save_path)
+        return "Image uploaded successfully", 200
+    return "No image uploaded", 400
 
 
 @app.route("/chat", methods=["POST"])
