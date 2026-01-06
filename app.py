@@ -7,6 +7,7 @@ from helper import load_knowledge_base, save
 from bot_persona import personas, select_persona
 from history_manager import delete_old_messages, summarize_history
 import uuid
+from image_manager import generate_image
 
 load_dotenv()
 
@@ -70,6 +71,7 @@ chatbot = save_conversation()
 def generate_response(prompt):
     max_retries = 1
     attempt_count = 0
+    global image_save_path
 
     current_persona = personas[select_persona(prompt)]
     user_message = f"""
@@ -84,7 +86,13 @@ def generate_response(prompt):
 
         try:
 
-            response = chatbot.send_message(user_message)
+            if image_save_path:
+                user_message += "\n The user has also uploaded an image. Consider the image in your response."
+                generated_image = generate_image(image_save_path)
+                response = chatbot.send_message([generated_image, user_message])
+                image_save_path = None
+            else:
+                response = chatbot.send_message(user_message)
 
             if len(chatbot.history) > 10:
                 chatbot.history = summarize_history(chatbot.history)
