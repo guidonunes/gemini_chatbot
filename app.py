@@ -40,7 +40,7 @@ def save_conversation():
         You are to remember all previous interactions in this conversation to provide better answers.
 
         ### FORMATTING RULES (STRICT):
-        1. **Be Concise:** Keep your answer short and direct (maximum 3-4 sentences, short bullet points or a short paragraph). Avoid long essays.
+        1. **Be Concise:** Keep your answer short and direct (maximum 3-4 sentences, short bullet points or a short paragraph). Avoid long essays, unless the user asks for it.
         2. **No Fluff:** Get straight to the point.
         3. **Follow-up Question:** You MUST end every single response with a short, relevant question to keep the conversation going.
 
