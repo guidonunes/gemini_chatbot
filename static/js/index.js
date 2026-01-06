@@ -1,6 +1,50 @@
 let chat = document.querySelector('#chat');
 let inputField = document.querySelector('#input-field'); // Updated ID
-let sendBtn = document.querySelector('#send-btn');       // Updated ID
+let sendBtn = document.querySelector('#send-btn');
+
+let selectedImage;
+let attachButton = document.querySelector('#more-options-btn');
+let imageInput;
+
+async function attachImage() {
+  let fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+
+  fileInput.onchange = async e => {
+    if(imageInput) {
+      imageInput.remove();
+    }
+
+    selectedImage = e.target.files[0];
+
+    imageInput = document.createElement('img');
+    imageInput.src = URL.createObjectURL(selectedImage);
+    imageInput.style.maxWidth = '3rem';
+    imageInput.style.maxHeight = '3rem';
+    imageInput.style.margin = '0.5rem';
+
+    document.querySelector('.input-area__container').insertBefore(imageInput, inputField);
+
+    let formData = new FormData();
+    formData.append('image', selectedImage);
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/upload_image", {
+          method: "POST",
+          body: formData,
+      });
+
+      const responseText = await response.text();
+      console.log(responseText);
+      console.log("Image uploaded successfully.");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+  fileInput.click();
+
+}
 
 async function sendMessage() {
     // Check if input is empty
@@ -72,3 +116,5 @@ inputField.addEventListener("keyup", function(event) {
         sendBtn.click();
     }
 });
+
+attachButton.addEventListener('click', attachImage);
