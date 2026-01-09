@@ -53,6 +53,11 @@ async function sendMessage() {
     let message = inputField.value;
     inputField.value = "";
 
+    if (imageInput) {
+      imageInput.remove();
+      imageInput = null;
+    }
+
     // Create and append User Bubble
     let newBubble = createUserBubble();
     newBubble.innerHTML = message;
@@ -62,7 +67,17 @@ async function sendMessage() {
     let newBotBubble = createBotBubble();
     chat.appendChild(newBotBubble);
     scrollToBottom();
-    newBotBubble.innerHTML = "Analyzing ..."; // Translated loading text
+    newBotBubble.innerHTML = "Analyzing"; // Translated loading text
+
+    let stages = ["Analyzing.", "Analyzing..", "Analyzing...", "Analyzing."];
+
+    let stageIndex = 0;
+
+    let loadingInterval = setInterval(() => {
+        newBotBubble.innerHTML = stages[stageIndex];
+        stageIndex = (stageIndex + 1) % stages.length;
+        scrollToBottom();
+    }, 500);
 
     // Send request to Flask API
     try {
@@ -76,7 +91,7 @@ async function sendMessage() {
 
         const responseText = await response.text();
         console.log(responseText);
-
+        clearInterval(loadingInterval);
         // Update Bot Bubble with actual response
         // Replaces newlines (\n) with HTML breaks (<br>)
         newBotBubble.innerHTML = responseText.replace(/\n/g, '<br>');

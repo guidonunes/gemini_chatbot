@@ -90,6 +90,7 @@ def generate_response(prompt):
                 user_message += "\n The user has also uploaded an image. Consider the image in your response."
                 generated_image = generate_image(image_save_path)
                 response = chatbot.send_message([generated_image, user_message])
+                os.remove(image_save_path)
                 image_save_path = None
             else:
                 response = chatbot.send_message(user_message)
@@ -106,6 +107,9 @@ def generate_response(prompt):
             attempt_count += 1
             if attempt_count >= max_retries:
                 return "Gemini Error: %s" % error
+            if image_save_path:
+                os.remove(image_save_path)
+                image_save_path = None
 
             sleep(50)
 
