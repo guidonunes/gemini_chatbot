@@ -106,3 +106,6 @@ satoshi-ai/
 ├── .env              # API Keys (Not committed)
 └── requirements.txt  # Dependencies
 ```
+
+## 📄 License
+This project is licensed under the MIT License.
